@@ -1,6 +1,5 @@
 package com.caiofonseca.foundationapi.api.dto;
 
-
 import lombok.*;
 
 import javax.validation.constraints.NotEmpty;
@@ -11,9 +10,10 @@ import javax.validation.constraints.NotEmpty;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class cidadeDTO {
+public class CidadeDTO {
 
     private Long id;
+
     @NotEmpty
     private String nome;
 

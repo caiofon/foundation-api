@@ -23,13 +23,14 @@ public class CidadeRepositoryTest {
     @Autowired
     CidadeRepository repository;
 
+
     public static Cidade createNewCidade(String nome) {
         return Cidade.builder().nome(nome).uf("SP").build();
     }
 
     @Test
     @DisplayName("Deve salvar uma Cidade.")
-    public void saveBookTest(){
+    public void saveCidadeTest(){
 
     Cidade cidade = createNewCidade("Sao Paulo");
 

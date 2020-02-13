@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 import javax.persistence.*;
 import java.util.List;
 
+
 @Data
 @Builder
 @AllArgsConstructor
@@ -19,8 +20,13 @@ public class Cidade {
     @Column
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
     @Column
     private String nome;
+
     @Column
     private String uf;
+
+
+
 }

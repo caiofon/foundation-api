@@ -23,6 +23,7 @@ public class CidadeServiceTest {
     @MockBean
     CidadeRepository repository;
 
+
     @BeforeEach
     public void  setUp(){
         this.service = new CidadeServiceImpl(repository);
