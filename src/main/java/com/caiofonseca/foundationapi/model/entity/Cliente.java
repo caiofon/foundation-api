@@ -7,7 +7,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
-import java.util.List;
+
 
 @Data
 @Builder
@@ -31,8 +31,7 @@ public class Cliente {
     @Column
     private int idade;
 
-    @JoinColumn(name = "Cidade")
-    @ManyToOne
-    private Cidade cidade;
+    @Column
+    private Long cidade;
 
 }

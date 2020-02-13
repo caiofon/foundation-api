@@ -18,13 +18,11 @@ public class ClienteDTO {
     @NotEmpty
     private String nome;
 
+    @NotEmpty
     private String dataNascimento;
 
     private Integer idade;
 
-    private Long cidadeId;
-
-    private CidadeDTO cidade;
-
+    private Long cidade;
 
 }

@@ -29,11 +29,12 @@ public class CidadeController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public Cidade create(@RequestBody @Valid CidadeDTO dto){
+    public CidadeDTO create(@RequestBody @Valid CidadeDTO dto){
 
         Cidade entity = modelMapper.map(dto, Cidade.class);
         entity = service.save(entity);
-        return entity;
+        CidadeDTO entityDTO = modelMapper.map(entity, CidadeDTO.class);
+        return entityDTO;
     }
 
     @GetMapping

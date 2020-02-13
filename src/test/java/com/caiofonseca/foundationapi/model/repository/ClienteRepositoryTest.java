@@ -1,6 +1,9 @@
 package com.caiofonseca.foundationapi.model.repository;
 
+
+
 import com.caiofonseca.foundationapi.model.entity.Cidade;
+import com.caiofonseca.foundationapi.model.entity.Cliente;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -15,29 +18,36 @@ import static org.assertj.core.api.Assertions.assertThat;
 @ExtendWith(SpringExtension.class)
 @ActiveProfiles("test")
 @DataJpaTest
-public class CidadeRepositoryTest {
+public class ClienteRepositoryTest {
 
     @Autowired
     TestEntityManager entityManager;
 
     @Autowired
-    CidadeRepository repository;
+    ClienteRepository repository;
 
-
-    public static Cidade createNewCidade(String nome) {
-        return Cidade.builder().nome("Sao Paulo").uf("SP").build();
+    public static Cliente createNewCliente() {
+            return  Cliente.builder()
+                    .nome("Caio Fonseca")
+                    .dataNascimento("24/04/1974")
+                    .idade(45)
+                    .cidade((long) 1)
+                    .build();
     }
 
     @Test
-    @DisplayName("Deve salvar uma Cidade.")
-    public void saveCidadeTest(){
+    @DisplayName("Deve salvar um Cliente.")
+    public void saveClienteTest(){
 
-    Cidade cidade = createNewCidade("Sao Paulo");
+        Cliente cliente = createNewCliente();
 
-        Cidade savedCidade = repository.save(cidade);
+        Cliente savedCliente = repository.save(cliente);
 
-        assertThat(savedCidade.getId()).isNotNull();
+        assertThat(savedCliente.getId()).isNotNull();
 
     }
 
+
+
 }
+
