@@ -12,6 +12,7 @@ import java.util.Optional;
 @Service
 public class ClienteServiceImpl implements ClienteService {
 
+
     private ClienteRepository repository;
 
     public ClienteServiceImpl(ClienteRepository repository) {
@@ -28,18 +29,30 @@ public class ClienteServiceImpl implements ClienteService {
     @Override
     public Page<Cliente> find(Cliente filter, Pageable pageRequest) {
         Example<Cliente> example = Example.of(filter,
-                ExampleMatcher
-                        .matching()
-                        .withIgnoreCase()
-                        .withIgnoreNullValues()
-                        .withStringMatcher( ExampleMatcher.StringMatcher.CONTAINING )
-        );
+                ExampleMatcher.matchingAny());
 
         return repository.findAll(example, pageRequest);
     }
 
     @Override
-    public Optional<Cliente> getClienteById(Long id) {
-        return repository.findById(id);
+    public Optional<Cliente> getById(Long id) {
+        return this.repository.findById(id);
     }
+
+    @Override
+    public void delete(Cliente cliente) {
+        if(cliente == null || cliente.getId() == null){
+            throw new IllegalArgumentException("Identificado do cliente nao pode ser nulo");
+        }
+        this.repository.delete(cliente);
+    }
+
+    @Override
+    public Cliente update(Cliente cliente) {
+        if(cliente == null || cliente.getId() == null){
+            throw new IllegalArgumentException("Identificado cliente nao pode ser nulo");
+        }
+        return this.repository.save(cliente);
+    }
+
 }

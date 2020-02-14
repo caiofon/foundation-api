@@ -12,6 +12,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.BDDMockito;
 import org.mockito.Mockito;
+import static org.mockito.ArgumentMatchers.anyLong;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -152,5 +153,120 @@ public class ClienteControllerTest {
                 .andExpect( MockMvcResultMatchers.jsonPath("pageable.pageSize").value(100) )
                 .andExpect( MockMvcResultMatchers.jsonPath("pageable.pageNumber").value(0));
     }
+
+    @Test
+    @DisplayName("Deve obter informacoes de um Cliente.")
+    public void getClienteDetailsTest() throws Exception{
+
+        Long id = Long.valueOf(1);
+        String nome = "Caio Fonseca";
+
+        Cliente cliente = Cliente.builder()
+                .id((long) 1)
+                .nome(nome)
+                .dataNascimento("24/04/1974")
+                .idade(45)
+                .cidade((long) 1)
+                .build();
+
+        BDDMockito.given( clienteService.getById(id) ).willReturn(Optional.of(cliente));
+
+
+        MockHttpServletRequestBuilder request = MockMvcRequestBuilders
+                .get(CLIENTE_API.concat("/" + id))
+                .accept(MediaType.APPLICATION_JSON);
+
+        mvc
+                .perform( request )
+                .andExpect( MockMvcResultMatchers.status().isOk() );
+
+    }
+
+    @Test
+    @DisplayName("Deve retornar resource not found quando o cliente procurado não existir")
+    public void bookNotFoundTest() throws Exception {
+
+        BDDMockito.given( clienteService.getById(Mockito.anyLong()) ).willReturn( Optional.empty() );
+
+        MockHttpServletRequestBuilder request = MockMvcRequestBuilders
+                .get(CLIENTE_API.concat("/" + 1))
+                .accept(MediaType.APPLICATION_JSON);
+
+        mvc
+                .perform(request)
+                .andExpect( MockMvcResultMatchers.status().isNotFound());
+    }
+
+    @Test
+    @DisplayName("Deve deletar um cliente")
+    public void deleteClienteTest() throws Exception {
+
+        BDDMockito.given(clienteService.getById(anyLong())).willReturn(Optional.of(Cliente.builder()
+                .id((long) 1)
+                .nome("Caio Fonseca")
+                .dataNascimento("24/04/1974")
+                .idade(45)
+                .cidade((long) 1)
+                .build()));
+
+        MockHttpServletRequestBuilder request = MockMvcRequestBuilders
+                .delete(CLIENTE_API.concat("/" + 1));
+
+        mvc.perform( request )
+                .andExpect( MockMvcResultMatchers.status().isNoContent() );
+    }
+
+    @Test
+    @DisplayName("Deve retornar resource not found quando não encontrar o cliente para deletar")
+    public void deleteInexistentClienteTest() throws Exception {
+
+        BDDMockito.given(clienteService.getById(anyLong())).willReturn(Optional.empty());
+
+        MockHttpServletRequestBuilder request = MockMvcRequestBuilders
+                .delete(CLIENTE_API.concat("/" + 1));
+
+        mvc.perform( request )
+                .andExpect( MockMvcResultMatchers.status().isNotFound() );
+    }
+
+    @Test
+    @DisplayName("Deve atualizar um cliente")
+    public void updateClienteTest() throws Exception {
+
+
+        ClienteDTO dto = ClienteDTO.builder()
+                .id((long) 1)
+                .nome("Joao da Silva")
+                .dataNascimento("24/04/1974")
+                .idade(45)
+                .cidade((long) 1)
+                .build();
+
+        String json = new ObjectMapper().writeValueAsString(dto);
+
+        Cliente updatingCliente = Cliente.builder()
+                .id((long) 1)
+                .nome("Caio Fonseca")
+                .dataNascimento("24/04/1974")
+                .idade(45)
+                .cidade((long) 1)
+                .build();
+
+        BDDMockito.given( clienteService.getById((long) 1) ).willReturn( Optional.of(updatingCliente) );
+
+
+        MockHttpServletRequestBuilder request = MockMvcRequestBuilders
+                .put(CLIENTE_API.concat("/" + 1))
+                .content(json)
+                .accept(MediaType.APPLICATION_JSON)
+                .contentType(MediaType.APPLICATION_JSON);
+
+        mvc.perform( request )
+                .andExpect( MockMvcResultMatchers.status().isOk() )
+                .andExpect( MockMvcResultMatchers.jsonPath("id").value(1) )
+                .andExpect( MockMvcResultMatchers.jsonPath("nome").value("Joao da Silva") );
+    }
+
+
 
 }

@@ -75,4 +75,35 @@ public class ClienteController {
         return new PageImpl<ClienteDTO>( list, pageRequest, result.getTotalElements() );
     }
 
+    @GetMapping("{id}")
+    public ClienteDTO get( @PathVariable Long id ){
+
+        return clienteService
+                .getById(id)
+                .map( cliente -> modelMapper.map(cliente, ClienteDTO.class)  )
+                .orElseThrow( () -> new ResponseStatusException(HttpStatus.NOT_FOUND) );
+    }
+
+    @DeleteMapping("{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void delete(@PathVariable Long id){
+        Cliente cliente = clienteService.getById(id).orElseThrow( () -> new ResponseStatusException(HttpStatus.NOT_FOUND) );
+        clienteService.delete(cliente);
+    }
+
+    @PutMapping("{id}")
+    public ClienteDTO update( @PathVariable Long id, @RequestBody @Valid ClienteDTO dto){
+
+        return clienteService.getById(id).map( cliente -> {
+
+            cliente.setNome(dto.getNome());
+
+            clienteService.update(cliente);
+            return modelMapper.map(cliente, ClienteDTO.class);
+
+
+        }).orElseThrow( () -> new ResponseStatusException(HttpStatus.NOT_FOUND) );
+    }
+
+
 }
