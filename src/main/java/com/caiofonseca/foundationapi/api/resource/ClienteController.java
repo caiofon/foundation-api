@@ -43,20 +43,6 @@ public class ClienteController {
     @ResponseStatus(HttpStatus.CREATED)
     public ClienteDTO create(@RequestBody @Valid ClienteDTO dto) throws ParseException {
 
-        // Recupera Cidade a partir do codigo de cidade informado
-       Cidade cidade = cidadeService
-                .getCidadeById(dto.getCidade())
-                .orElseThrow(() ->
-                        new ResponseStatusException(HttpStatus.BAD_REQUEST, "Cidade não cadastrada"));
-
-
-        // Calcula a Idade baseado na data de nascimento
-        Date dataSistema = new Date();
-        DateFormat df = new SimpleDateFormat("dd/MM/yyyy");
-        String stringDataSistema = df.format(dataSistema);
-        DataTools dataTools = new DataTools();
-        int idadeAtual = dataTools.getAnosEntreDuasDatas(dto.getDataNascimento(), stringDataSistema);
-        dto.setIdade(idadeAtual);
 
         Cliente entity = modelMapper.map(dto, Cliente.class);
         entity = clienteService.save(entity);

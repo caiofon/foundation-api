@@ -7,11 +7,12 @@ import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
+import java.text.ParseException;
 import java.util.Optional;
 
 public interface ClienteService {
 
-    Cliente save(Cliente any);
+    Cliente save(Cliente any) throws ParseException;
 
     Page<Cliente> find(Cliente any, Pageable any1);
 

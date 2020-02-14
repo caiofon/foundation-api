@@ -1,5 +1,9 @@
 package com.caiofonseca.foundationapi.util;
 
+import com.caiofonseca.foundationapi.api.exceptions.BusinessException;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.server.ResponseStatusException;
+
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -46,7 +50,8 @@ public class DataTools {
 
         } catch (ParseException pe) {
 
-            return 0;
+            throw new BusinessException("Data para calculo de numero de anos invalida. Formato DD/MM/YYYY");
+
             }
     }
 
